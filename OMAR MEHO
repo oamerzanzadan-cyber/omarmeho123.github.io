@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار شخصية من برجك</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'cairo': ['Cairo', 'sans-serif']
+                },
+                animation: {
+                    'fadeIn': 'fadeIn 0.5s ease-in-out',
+                    'slideUp': 'slideUp 0.4s ease-out',
+                    'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    'float': 'float 6s ease-in-out infinite'
+                },
+                keyframes: {
+                    fadeIn: {
+                        '0%': { opacity: '0' },
+                        '100%': { opacity: '1' }
+                    },
+                    slideUp: {
+                        '0%': { transform: 'translateY(20px)', opacity: '0' },
+                        '100%': { transform: 'translateY(0)', opacity: '1' }
+                    },
+                    float: {
+                        '0%, 100%': { transform: 'translateY(0px)' },
+                        '50%': { transform: 'translateY(-10px)' }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap');
+
+    * {
+        font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+        scroll-behavior: smooth;
+    }
+
+   .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+   .dark.gradient-bg {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+
+   .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+   .dark.glass-effect {
+        background: rgba(30, 41, 59, 0.4);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+   .zodiac-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+    }
+
+   .dark.zodiac-card:hover {
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+    }
+
+   .modal-backdrop {
+        backdrop-filter: blur(8px);
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+   .dark ::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 glass-effect shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 gradient-bg rounded-full flex items-center justify-center animate-pulse-slow">
+                        <i class="fas fa-star text-white text-lg"></i>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                        اختبار الأبراج
+                    </h1>
+                </div>
+                <button id="darkModeToggle" class="p-3 rounded-full bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 transition-all duration-300">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg py-16 md:py-24 relative overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full animate-float"></div>
+            <div class="absolute bottom-20 left-10 w-32 h-32 bg-white/10 rounded-full animate-float" style="animation-delay: 2s;"></div>
+        </div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h2 class="text-4xl md:text-6xl font-black text-white mb-4 animate-slideUp">
+                اعرف شخصيتك من برجك ✨
+            </h2>
+            <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto animate-fadeIn">
+                اكتشف أسرار شخصيتك، نقاط قوتك وضعفك، والوظائف المناسبة لك حسب برجك الفلكي
+            </p>
+            <div class="flex items-center justify-center gap-2 text-white/80">
+                <i class="fas fa-mouse-pointer"></i>
+                <span>اختر برجك للحصول على تحليل شامل</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Zodiac Cards Grid -->
+    <section class="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6" id="zodiacGrid">
+                <!-- Cards will be inserted by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-black text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">© 2025 اختبار شخصية من برجك. جميع الحقوق محفوظة</p>
+            <p class="text-sm text-gray-500 mt-2">لأغراض الترفيه فقط - لا يعتمد على أسس علمية</p>
+        </div>
+    </footer>
+
+    <!-- Form Modal -->
+    <div id="formModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop bg-black/60">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto animate-slideUp">
+            <div class="gradient-bg p-6 rounded-t-3xl relative">
+                <button id="closeFormModal" class="absolute top-4 left-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-white"></i>
+                </button>
+                <div class="text-center text-white">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i id="modalZodiacIcon" class="text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-1">عشان تشوف تحليل شخصيتك الكامل</h3>
+                    <p class="text-white/90 text-sm">برج <span id="modalZodiacName" class="font-bold"></span></p>
+                </div>
+            </div>
+
+            <form id="userForm" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        <i class="fas fa-user text-purple-600 dark:text-purple-400 ml-1"></i>
+                        الاسم <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="name" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-purple-500 transition-all" placeholder="أدخل اسمك">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        <i class="fas fa-envelope text-purple-600 dark:text-purple-400 ml-1"></i>
+                        الإيميل <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email" id="email" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-purple-500 transition-all" placeholder="example@email.com">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        <i class="fab fa-facebook text-blue-600 ml-1"></i>
+                        رابط فيسبوك <span class="text-gray-400 text-xs">(اختياري)</span>
+                    </label>
+                    <input type="url" id="facebook" class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-purple-500 transition-all" placeholder="https://facebook.com/username">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        <i class="fab fa-instagram text-pink-600 ml-1"></i>
+                        رابط انستجرام <span class="text-gray-400 text-xs">(اختياري)</span>
+                    </label>
+                    <input type="url" id="instagram" class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-purple-500 transition-all" placeholder="https://instagram.com/username">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-2">
+                        <i class="fab fa-whatsapp text-green-600 ml-1"></i>
+                        واتساب <span class="text-gray-400 text-xs">(اختياري)</span>
+                    </label>
+                    <input type="tel" id="whatsapp" class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-purple-500 transition-all" placeholder="+966 50 XXX XXXX">
+                </div>
+
+                <div class="flex items-start gap-3 p-4 bg-purple-50 dark:bg-slate-700/50 rounded-xl">
+                    <input type="checkbox" id="agreeCheckbox" required class="mt-1 w-5 h-5 text-purple-600 rounded focus:ring-purple-500">
+                    <label for="agreeCheckbox" class="text-sm cursor-pointer">
+                        أوافق على حفظ بياناتي لاستلام النتيجة والعروض
+                    </label>
+                </div>
+
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
+                    <div class="flex items-start gap-2">
+                        <i class="fas fa-shield-alt text-blue-600 dark:text-blue-400 mt-1"></i>
+                        <p class="text-xs text-gray-700 dark:text-gray-300">
+                            <strong>سياسة الخصوصية:</strong> لن نشارك بياناتك مع أي طرف ثالث. يمكنك طلب حذفها في أي وقت.
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full gradient-bg text-white font-bold py-4 rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+                    <span>احصل على التحليل الآن</span>
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop bg-black/60 p-4">
+        <div class="min-h-screen flex items-center justify-center py-8">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-4xl w-full animate-slideUp">
+                <div class="gradient-bg p-8 rounded-t-3xl relative">
+                    <button id="closeResultModal" class="absolute top-4 left-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
+                        <i class="fas fa-times text-white"></i>
+                    </button>
+                    <div class="text-center text-white">
+                        <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i id="resultIcon" class="text-4xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-black mb-2">تحليل شخصية برج <span id="resultZodiacName"></span></h3>
+                        <p class="text-white/90">مرحباً <span id="resultUserName" class="font-bold"></span></p>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 space-y-6">
+                    <div id="resultContent" class="space-y-6">
+                        <!-- Content will be inserted by JS -->
+                    </div>
+
+                    <button id="backToHome" class="w-full bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-900 dark:text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fas fa-home"></i>
+                        <span>العودة للرئيسية</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Modal -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden overflow-y-auto modal-backdrop bg-black/60 p-4">
+        <div class="min-h-screen flex items-center justify-center py-8">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-7xl w-full animate-slideUp">
+                <div class="gradient-bg p-6 rounded-t-3xl">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3 text-white">
+                            <i class="fas fa-chart-line text-2xl"></i>
+                            <div>
+                                <h3 class="text-2xl font-black">لوحة التحكم</h3>
+                                <p class="text-sm text-white/80">إدارة المشاركين والبيانات</p>
+                            </div>
+                        </div>
+                        <button id="closeAdminModal" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fas fa-times text-white"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <!-- Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-2xl p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm mb-1">إجمالي المشاركين</p>
+                                    <p class="text-3xl font-black" id="totalUsers">0</p>
+                                </div>
+                                <i class="fas fa-users text-4xl text-white/30"></i>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm mb-1">الأكثر شعبية</p>
+                                    <p class="text-xl font-bold" id="popularZodiac">-</p>
+                                </div>
+                                <i class="fas fa-trophy text-4xl text-white/30"></i>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-500 to-emerald-500 text-white rounded-2xl p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm mb-1">آخر تسجيل</p>
+                                    <p class="text-sm font-semibold" id="lastRegister">-</p>
+                                </div>
+                                <i class="fas fa-clock text-4xl text-white/30"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <button id="exportCSV" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 hover:scale-105">
+                            <i class="fas fa-file-csv"></i>
+                            <span>تصدير CSV</span>
+                        </button>
+                        <button id="clearData" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 hover:scale-105">
+                            <i class="fas fa-trash"></i>
+                            <span>مسح البيانات</span>
+                        </button>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-slate-700">
+                        <table class="w-full">
+                            <thead class="bg-gray-100 dark:bg-slate-700">
+                                <tr>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">#</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">الاسم</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">الإيميل</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">البرج</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">فيسبوك</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">انستجرام</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">واتساب</th>
+                                    <th class="px-4 py-3 text-right text-sm font-bold">تاريخ التسجيل</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody" class="divide-y divide-gray-200 dark:divide-slate-700">
+                                <!-- Data will be inserted by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const zodiacSigns = [
+            {
+                name: 'الحمل', icon: 'fa-fire', dates: '21 مارس - 19 أبريل', color: 'from-red-500 to-orange-500',
+                strengths: ['شجاع ومقدام', 'طموح ومتحمس', 'واثق من نفسه', 'نشيط ومليء بالطاقة'],
+                weaknesses: ['متسرع أحياناً', 'عنيد', 'سريع الغضب', 'يميل للسيطرة'],
+                compatibility: ['الأسد', 'القوس', 'الجوزاء', 'الدلو'],
+                careers: ['رائد أعمال', 'مدير', 'رياضي', 'جراح'],
+                quote: 'الأول في كل شيء، قائد بالفطرة لا يقبل الهزيمة'
+            },
+            {
+                name: 'الثور', icon: 'fa-mountain', dates: '20 أبريل - 20 مايو', color: 'from-green-500 to-emerald-600',
+                strengths: ['صبور وموثوق', 'عملي وواقعي', 'مخلص', 'محب للجمال والفن'],
+                weaknesses: ['عنيد جداً', 'غيور', 'مادي أحياناً', 'مقاوم للتغيير'],
+                compatibility: ['العذراء', 'الجدي', 'السرطان', 'الحوت'],
+                careers: ['مصمم ديكور', 'طباخ', 'موسيقي', 'محاسب'],
+                quote: 'الثبات والاستقرار أساس النجاح، والجمال قيمة لا تقدر بثمن'
+            },
+            {
+                name: 'الجوزاء', icon: 'fa-wind', dates: '21 مايو - 20 يونيو', color: 'from-yellow-400 to-amber-500',
+                strengths: ['ذكي وسريع البديهة', 'اجتماعي ومتحدث', 'قابل للتكيف', 'فضولي ومتعلم'],
+                weaknesses: ['متقلب المزاج', 'سطحي أحياناً', 'عصبي', 'غير حاسم'],
+                compatibility: ['الميزان', 'الدلو', 'الحمل', 'الأسد'],
+                careers: ['صحفي', 'مدرس', 'مسوق', 'كاتب'],
+                quote: 'المعرفة قوة، والتواصل فن الحياة'
+            },
+            {
+                name: 'السرطان', icon: 'fa-moon', dates: '21 يونيو - 22 يوليو', color: 'from-blue-400 to-cyan-500',
+                strengths: ['حساس وعاطفي', 'مخلص للعائلة', 'حدسه قوي', 'متعاطف مع الآخرين'],
+                weaknesses: ['متقلب المزاج', 'متشائم', 'حساس جداً', 'يميل للانطواء'],
+                compatibility: ['العقرب', 'الحوت', 'الثور', 'العذراء'],
+                careers: ['معالج نفسي', 'طباخ', 'ممرض', 'معلم أطفال'],
+                quote: 'البيت والعائلة هما الأمان الحقيقي'
+            },
+            {
+                name: 'الأسد', icon: 'fa-crown', dates: '23 يوليو - 22 أغسطس', color: 'from-amber-500 to-yellow-600',
+                strengths: ['كريم وسخي', 'واثق من نفسه', 'مبدع', 'قائد طبيعي'],
+                weaknesses: ['متسلط أحياناً', 'متكبر', 'عنيد', 'يحب الظهور'],
+                compatibility: ['الحمل', 'القوس', 'الجوزاء', 'الميزان'],
+                careers: ['ممثل', 'مدير تنفيذي', 'مصمم أزياء', 'طبيب'],
+                quote: 'ولدت لأكون نجماً، والعالم مسرحي'
+            },
+            {
+                name: 'العذراء', icon: 'fa-seedling', dates: '23 أغسطس - 22 سبتمبر', color: 'from-lime-500 to-green-600',
+                strengths: ['دقيق ومنظم', 'عملي ومحلل', 'مخلص', 'متواضع'],
+                weaknesses: ['ناقد للذات وللآخرين', 'قلق', 'مهووس بالتفاصيل', 'خجول'],
+                compatibility: ['الثور', 'الجدي', 'السرطان', 'العقرب'],
+                careers: ['محلل بيانات', 'طبيب', 'محرر', 'مبرمج'],
+                quote: 'الكمال في التفاصيل، والجودة لا تأتي صدفة'
+            },
+            {
+                name: 'الميزان', icon: 'fa-scale-balanced', dates: '23 سبتمبر - 22 أكتوبر', color: 'from-pink-400 to-rose-500',
+                strengths: ['دبلوماسي', 'عادل ومنصف', 'اجتماعي', 'محب للجمال'],
+                weaknesses: ['متردد', 'يسعى لإرضاء الجميع', 'سطحي أحياناً', 'كاره للمواجهة'],
+                compatibility: ['الجوزاء', 'الدلو', 'الأسد', 'القوس'],
+                careers: ['محامي', 'مصمم', 'وسيط', 'مستشار'],
+                quote: 'العدل والانسجام أساس السعادة'
+            },
+            {
+                name: 'العقرب', icon: 'fa-skull', dates: '23 أكتوبر - 21 نوفمبر', color: 'from-red-700 to-purple-800',
+                strengths: ['شغوف ومخلص', 'قوي الإرادة', 'حدسه قوي', 'غامض وجذاب'],
+                weaknesses: ['غيور وحاقد', 'متسلط', 'كتوم', 'انتقامي'],
+                compatibility: ['السرطان', 'الحوت', 'العذراء', 'الجدي'],
+                careers: ['محقق', 'طبيب نفسي', 'جراح', 'باحث'],
+                quote: 'أنا أغوص في الأعماق لأكتشف الحقيقة'
+            },
+            {
+                name: 'القوس', icon: 'fa-bullseye', dates: '22 نوفمبر - 21 ديسمبر', color: 'from-violet-500 to-purple-600',
+                strengths: ['متفائل ومحب للحياة', 'صادق ومباشر', 'مغامر', 'فلسفي'],
+                weaknesses: ['غير صبور', 'مهمل بالتفاصيل', 'غير دبلوماسي', 'متهور'],
+                compatibility: ['الحمل', 'الأسد', 'الميزان', 'الدلو'],
+                careers: ['مرشد سياحي', 'أستاذ جامعي', 'كاتب رحلات', 'رياضي'],
+                quote: 'الحرية والمغامرة هما معنى الحياة'
+            },
+            {
+                name: 'الجدي', icon: 'fa-mountain-sun', dates: '22 ديسمبر - 19 يناير', color: 'from-slate-600 to-gray-800',
+                strengths: ['طموح ومنضبط', 'مسؤول', 'صبور', 'واقعي'],
+                weaknesses: ['متشائم', 'عنيد', 'محافظ', 'لا يسامح بسهولة'],
+                compatibility: ['الثور', 'العذراء', 'العقرب', 'الحوت'],
+                careers: ['مدير تنفيذي', 'مهندس', 'محاسب', 'سياسي'],
+                quote: 'بالصبر والعمل الجاد تتحقق الأحلام'
+            },
+            {
+                name: 'الدلو', icon: 'fa-water', dates: '20 يناير - 18 فبراير', color: 'from-cyan-400 to-blue-600',
+                strengths: ['مبتكر ومستقل', 'إنساني', 'ذكي', 'مخلص للأصدقاء'],
+                weaknesses: ['عنيد', 'بارد عاطفياً', 'متمرد', 'لا يمكن التنبؤ به'],
+                compatibility: ['الجوزاء', 'الميزان', 'القوس', 'الحمل'],
+                careers: ['عالم', 'مخترع', 'مبرمج', 'ناشط'],
+                quote: 'أفكر بطريقة مختلفة لأغير العالم'
+            },
+            {
+                name: 'الحوت', icon: 'fa-fish', dates: '19 فبراير - 20 مارس', color: 'from-teal-400 to-cyan-600',
+                strengths: ['خيالي ومبدع', 'متعاطف', 'حدسه قوي', 'لطيف'],
+                weaknesses: ['حالم', 'ساذج', 'هرب من الواقع', 'متشائم'],
+                compatibility: ['السرطان', 'العقرب', 'الثور', 'الجدي'],
+                careers: ['فنان', 'موسيقي', 'شاعر', 'معالج نفسي'],
+                quote: 'الخيال هو النافذة إلى عالم أجمل'
+            }
+        ];
+
+        let selectedZodiac = null;
+
+        // Dark Mode
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        if (localStorage.getItem('darkMode') === 'true' || (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('darkMode', html.classList.contains('dark'));
+        });
+
+        // Render Zodiac Cards
+        const zodiacGrid = document.getElementById('zodiacGrid');
+        zodiacSigns.forEach((sign, index) => {
+            const card = document.createElement('div');
+            card.className = 'zodiac-card bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden animate-fadeIn';
+            card.style.animationDelay = `${index * 0.05}s`;
+            card.innerHTML = `
+                <div class="h-2 bg-gradient-to-r ${sign.color}"></div>
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${sign.color} flex items-center justify-center">
+                        <i class="fas ${sign.icon} text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${sign.name}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">${sign.dates}</p>
+                </div>
+            `;
+            card.addEventListener('click', () => openFormModal(sign));
+            zodiacGrid.appendChild(card);
+        });
+
+        // Modal Management
+        const formModal = document.getElementById('formModal');
+        const resultModal = document.getElementById('resultModal');
+        const adminModal = document.getElementById('adminModal');
+
+        function openFormModal(sign) {
+            selectedZodiac = sign;
+            document.getElementById('modalZodiacName').textContent = sign.name;
+            document.getElementById('modalZodiacIcon').className = `fas ${sign.icon}`;
+            formModal.classList.remove('hidden');
+            formModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('closeFormModal').addEventListener('click', () => closeModal(formModal));
+        document.getElementById('closeResultModal').addEventListener('click', () => closeModal(resultModal));
+        document.getElementById('closeAdminModal').addEventListener('click', () => closeModal(adminModal));
+        document.getElementById('backToHome').addEventListener('click', () => closeModal(resultModal));
+
+        formModal.addEventListener('click', (e) => {
+            if (e.target === formModal) closeModal(formModal);
+        });
+
+        // Form Submission
+        document.getElementById('userForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const agreeCheckbox = document.getElementById('agreeCheckbox');
+            if (!agreeCheckbox.checked) {
+                alert('يجب الموافقة على حفظ البيانات للمتابعة');
+                return;
+            }
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                facebook: document.getElementById('facebook').value || '-',
+                instagram: document.getElementById('instagram').value || '-',
+                whatsapp: document.getElementById('whatsapp').value || '-',
+                zodiac: selectedZodiac.name,
+                date: new Date().toLocaleString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            // Save to localStorage
+            const submissions = JSON.parse(localStorage.getItem('zodiacSubmissions') || '[]');
+            submissions.push(formData);
+            localStorage.setItem('zodiacSubmissions', JSON.stringify(submissions));
+
+            // Show Result
+            showResult(formData.name);
+            closeModal(formModal);
+
+            // Reset form
+            e.target.reset();
+        });
+
+        function showResult(userName) {
+            document.getElementById('resultZodiacName').textContent = selectedZodiac.name;
+            document.getElementById('resultUserName').textContent = userName;
+            document.getElementById('resultIcon').className = `fas ${selectedZodiac.icon}`;
+
+            const content = `
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 border border-green-200 dark:border-green-800">
+                        <h4 class="text-xl font-bold mb-4 flex items-center gap-2 text-green-700 dark:text-green-400">
+                            <i class="fas fa-star"></i>
+                            نقاط القوة
+                        </h4>
+                        <ul class="space-y-2">
+                            ${selectedZodiac.strengths.map(s => `<li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-600 dark:text-green-400 mt-1"></i><span>${s}</span></li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl p-6 border border-red-200 dark:border-red-800">
+                        <h4 class="text-xl font-bold mb-4 flex items-center gap-2 text-red-700 dark:text-red-400">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            نقاط الضعف
+                        </h4>
+                        <ul class="space-y-2">
+                            ${selectedZodiac.weaknesses.map(w => `<li class="flex items-start gap-2"><i class="fas fa-times-circle text-red-600 dark:text-red-400 mt-1"></i><span>${w}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
+                    <h4 class="text-xl font-bold mb-4 flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                        <i class="fas fa-heart"></i>
+                        التوافق مع الأبراج
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                        ${selectedZodiac.compatibility.map(c => `<span class="px-4 py-2 bg-white dark:bg-slate-700 rounded-full text-sm font-semibold shadow-sm">${c}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800">
+                    <h4 class="text-xl font-bold mb-4 flex items-center gap-2 text-purple-700 dark:text-purple-400">
+                        <i class="fas fa-briefcase"></i>
+                        وظائف مناسبة
+                    </h4
